@@ -14,12 +14,19 @@ const queryAsync = (sql, values = []) => {
     })
 }
 
-//GET /: Rota inicial de teste.
+function verificarId(id){
+     if(!id || isNaN(id)){
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: 'ID de produto inválido'
+            })
+        }
+}
+
 app.get('/', (req,res) => {
     res.send("API RESTAURANTE")
 })
 
-//GET /produtos: Listar todos os produtos (ordenados por ID decrescente).
 app.get('/produtos', async (req,res) =>{
     try{
         const produtos= await queryAsync('SELECT * FROM produto ORDER BY id DESC')
@@ -38,7 +45,6 @@ app.get('/produtos', async (req,res) =>{
     }
 })
 
-//GET /produtos/:id: Buscar um produto específico (validar se o ID é numérico).
 app.get('/produtos/:id', async (req,res) =>{
     try{
         const{id} = req.params
@@ -68,7 +74,6 @@ app.get('/produtos/:id', async (req,res) =>{
     })
     }
 })
-
 
 app.post('/produtos', async(req,res) =>{
     try {
@@ -102,9 +107,7 @@ app.post('/produtos', async(req,res) =>{
             preco: preco,
             disponivel: disponivel
         }
-
         const resultado = await queryAsync('INSERT INTO produto SET ?',[novoProduto])
-
         res.status(201).json({
             sucesso: true,
             mensagem: 'Produto cadastrado com sucesso.',
@@ -120,7 +123,6 @@ app.post('/produtos', async(req,res) =>{
     }
 } )
 
-// PUT /produtos/:id
 app.put('/produtos/:id', async(req,res) =>{
     try {
         const {id}= req.params
@@ -131,7 +133,6 @@ app.put('/produtos/:id', async(req,res) =>{
                 mensagem: 'ID do produto inválido'
             })
         }
-        
         const produtoExiste= await queryAsync('SELECT * FROM produto WHERE id =?', [id])
         if(produtoExiste.length === 0){
             return res.status(404).json({
