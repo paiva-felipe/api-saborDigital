@@ -10,4 +10,8 @@ router.post('/', produtoController.cadastrarProduto)
 router.put('/:id', produtoController.atualizarProduto)
 router.delete('/:id', produtoController.deletarProduto)
 
+const upload = require("../middlewares/upload")
+router.post("/produtos", upload.single("imagem"), produtoController.create
+)
+
 module.exports = router

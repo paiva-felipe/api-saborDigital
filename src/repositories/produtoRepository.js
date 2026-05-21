@@ -38,4 +38,15 @@ class PodutoRepository{
     }
 }  /// função acabou aqui, afinal verificções é obrigação da service
 
+const pool = require("../config/database")
+
+exports.create = async (data) => {
+  const { nome, preco, imagem } = data
+  const result = await pool.query(
+    "INSERT INTO produtos (nome, preco, imagem) VALUES ($1, $2, $3) RETURNING *",
+    [nome, preco, imagem]
+  )
+  return result.rows[0]
+}
+
 module.eports = new ProdutoRepository() 

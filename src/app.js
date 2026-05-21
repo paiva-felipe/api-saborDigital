@@ -5,6 +5,7 @@ const routes = require('./routes')  //vai buscar o index.js(routes)
 app.use('/', routes)
 module.exports = app
 
+app.use("/uploads", express.static("uploads")) //isso faz a imagem virar URL.
 
 
 

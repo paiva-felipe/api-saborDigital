@@ -40,6 +40,21 @@ class produtoController{
         try{
             const resultado = await produtoService.cadastrarProduto(req.body)
             res.json(resultado)
+
+            // 👇 AQUI entra o arquivo do multer
+      const imagem = req.file
+
+      const produto = await produtoService.cadastrarProduto({
+        nome,
+        preco,
+        imagem: imagem ? imagem.filename : null
+      })
+
+      return res.status(201).json({
+        sucesso: true,
+        dados: produto
+      })
+
         } catch(erro){
             res.status(erro.status || 500).json({     //erro.status--> erro do service
                 sucesso: false,
